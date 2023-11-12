@@ -60,6 +60,15 @@ def get_bookmark_id_for_deletion():
     return get_user_input('Enter a bookmark ID to delete')
 
 
+def get_github_import_options():
+    return {
+        'github_username': get_user_input('Username GitHub'),
+        'preserve_timestamps': get_user_input(
+            'Save timestamps? [Y/n]',
+            required=False) in {'Y', 'y', None}
+    }
+
+
 def loop():
     options = {
             'A': Option('Добавить закладку', commands.AddBookmarkCommand(),
@@ -70,6 +79,9 @@ def loop():
                         commands.ListBookmarksCommand(order_by='title')),
             'D': Option('Удалить закладку', commands.DeleteBookmarkCommand(),
                         prep_call=get_bookmark_id_for_deletion),
+            'G': Option('Import GitHub starts',
+                        commands.ImportGitHubStarsCommand(),
+                        prep_call=get_github_import_options),
             'Q': Option('Выйти', commands.QuitCommand()),
         }
     print_options(options)
